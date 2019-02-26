@@ -20,6 +20,7 @@
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
+package middleman.interfaces;
 
 import java.util.ArrayList;
 

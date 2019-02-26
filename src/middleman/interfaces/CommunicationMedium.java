@@ -20,6 +20,7 @@
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
+package middleman.interfaces;
 
 public interface CommunicationMedium {
     void init();
