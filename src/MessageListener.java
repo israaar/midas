@@ -1,5 +1,5 @@
 /*
- * Message.java
+ * MessageListener.java
  *
  * Version:
  *     $Id$
@@ -14,7 +14,7 @@
  */
 
 /**
- * This class is the underlying structure of the Message
+ * This class is the underlying structure of the MessageListener
  *
  * @author Jesse Saran
  * @author Kyle Cutler
@@ -22,7 +22,6 @@
  */
 
 
-Message {
-    int id;
-    byte[] payload;
+interface MessageListener {
+    void onMessageReceived(Message message);
 }

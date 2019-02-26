@@ -21,8 +21,8 @@
  * @author Allahsera Auguste Tapo
  */
 
-CommunicationMedium {
+public interface CommunicationMedium {
     void init();
     void send(Message message);
-    void onReceive(MessageReceiver messageReceiver);
+    void onReceive(MessageListener messageListener);
 }

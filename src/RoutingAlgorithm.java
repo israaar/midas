@@ -1,5 +1,5 @@
 /*
- * MessageReceiver.java
+ * RoutingAlgorithm.java
  *
  * Version:
  *     $Id$
@@ -14,7 +14,7 @@
  */
 
 /**
- * This class is the underlying structure of the MessageReceiver
+ * This class is the underlying structure of the RoutingAlgorithm
  *
  * @author Jesse Saran
  * @author Kyle Cutler
@@ -22,6 +22,6 @@
  */
 
 
-MessageReceiver {
-    void  onMessageReceived(Message message);
+public interface RoutingAlgorithm extends MessageListener {
+    void startRouting();
 }
