@@ -23,6 +23,6 @@
 package middleman.interfaces;
 
 
-interface MessageListener {
+public interface MessageListener {
     void onMessageReceived(Message message);
 }
