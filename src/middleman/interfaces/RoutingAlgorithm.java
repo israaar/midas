@@ -23,6 +23,14 @@
 package middleman.interfaces;
 
 
-public interface RoutingAlgorithm extends MessageListener {
-    void startRouting();
+public abstract class RoutingAlgorithm
+    implements MessageReceiveListener, MessageSendListener {
+
+    protected CommunicationManager manager;
+
+    public RoutingAlgorithm(CommunicationManager manager) {
+        this.manager = manager;
+    }
+
+    public abstract void startRouting();
 }

@@ -1,5 +1,5 @@
 /*
- * MessageListener.java
+ * MessageSendListener.java
  *
  * Version:
  *     $Id$
@@ -14,7 +14,7 @@
  */
 
 /**
- * This class is the underlying structure of the MessageListener
+ * This class is the underlying structure of the MessageSendListener
  *
  * @author Jesse Saran
  * @author Kyle Cutler
@@ -23,6 +23,6 @@
 package middleman.interfaces;
 
 
-public interface MessageListener {
-    void onMessageReceived(Message message);
+public interface MessageSendListener {
+    void onMessageSent(Message message);
 }

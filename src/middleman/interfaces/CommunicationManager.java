@@ -24,16 +24,16 @@ package middleman.interfaces;
 
 import java.util.ArrayList;
 
-public final class CommunicationManager {
-    private static ArrayList<CommunicationMedium> media;
+public class CommunicationManager {
+    private ArrayList<CommunicationMedium> media = new ArrayList<>();
 
-    private CommunicationManager() {}
+    public CommunicationManager() {}
 
-    public static void addCommunicationMedium(CommunicationMedium medium) {
+    public void addCommunicationMedium(CommunicationMedium medium) {
         media.add(medium);
     }
 
-    public static ArrayList<CommunicationMedium> getCommunicationMedia() {
+    public ArrayList<CommunicationMedium> getCommunicationMedia() {
         return media;
     }
 }

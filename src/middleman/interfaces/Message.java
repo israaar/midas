@@ -23,18 +23,27 @@
 package middleman.interfaces;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Message implements Serializable {
-    public final int id;
+    public final UUID id;
     public final byte[] payload;
 
     private static final long serialVersionUID = 1;
 
-    public Message(int id) {
+    public Message() {
+        this(UUID.randomUUID());
+    }
+
+    public Message(byte[] payload) {
+        this(UUID.randomUUID(), payload);
+    }
+
+    public Message(UUID id) {
         this(id, new byte[]{});
     }
 
-    public Message(int id, byte[] payload) {
+    public Message(UUID id, byte[] payload) {
         this.id = id;
         this.payload = payload;
     }
