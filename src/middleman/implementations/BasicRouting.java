@@ -27,24 +27,13 @@ import java.util.UUID;
 
 import middleman.interfaces.*;
 
-public class BasicRouting extends RoutingAlgorithm {
+public class BasicRouting extends Router {
     private HashSet<UUID> seenMessages = new HashSet<UUID>();
-
-    public BasicRouting(CommunicationManager manager) {
-        super(manager);
-    }
-
-    @Override
-    public void startRouting() {
-
-    }
 
     @Override
     public void onMessageReceived(Message message) {
         if (seenMessages.add(message.id)) {
-            manager.getCommunicationMedia().forEach(
-                medium -> medium.send(message)
-            );
+            this.send(message);
         }
     }
 

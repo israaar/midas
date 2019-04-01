@@ -10,12 +10,9 @@ public class BasicTest {
         ArrayList<Node> nodes = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            CommunicationManager manager = new CommunicationManager();
-
             nodes.add(new Node(
-                new SoftwareMedium(),
-                manager,
-                new BasicRouting(manager)
+                new CompositeMedium(new SoftwareMedium()),
+                new BasicRouting()
             ));
         }
 

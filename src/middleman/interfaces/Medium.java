@@ -1,5 +1,5 @@
 /*
- * CommunicationMedium.java
+ * Medium.java
  *
  * Version:
  *     $Id$
@@ -14,7 +14,7 @@
  */
 
 /**
- * This class is the underlying structure of the CommunicationMedium
+ * This class is the underlying structure of the Medium
  *
  * @author Jesse Saran
  * @author Kyle Cutler
@@ -24,27 +24,15 @@ package middleman.interfaces;
 
 import java.util.ArrayList;
 
-public abstract class CommunicationMedium {
-    private ArrayList<MessageSendListener> sendListeners = new ArrayList<>();
+public abstract class Medium {
     private ArrayList<MessageReceiveListener> receiveListeners = new ArrayList<>();
-
-    public CommunicationMedium() {
-        this.init();
-    }
-
-    /**
-     * Initialize the medium
-     */
-    public abstract void init();
 
     /**
      * Sends the given message via the medium
      *
      * @param message The message to send
      */
-    public void send(Message message) {
-        sendListeners.forEach(listener -> listener.onMessageSent(message));
-    }
+    public abstract void send(Message message);
 
     /**
      * Called internally whenever a message is received. Notifies all registered
@@ -54,16 +42,6 @@ public abstract class CommunicationMedium {
      */
     protected void receive(Message message) {
         receiveListeners.forEach(listener -> listener.onMessageReceived(message));
-    }
-
-    /**
-     * Registers the given MessageSendListener so that it will be notified whenever
-     * a message is sent
-     *
-     * @param MessageSendListener The MessageSendListener to notify
-     */
-    public void onSend(MessageSendListener MessageSendListener) {
-        sendListeners.add(MessageSendListener);
     }
 
     /**

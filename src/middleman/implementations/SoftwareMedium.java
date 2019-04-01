@@ -26,18 +26,15 @@ import java.util.ArrayList;
 
 import middleman.interfaces.*;
 
-public class SoftwareMedium extends CommunicationMedium {
+public class SoftwareMedium extends Medium {
     private static ArrayList<SoftwareMedium> networkNodes = new ArrayList<>();
 
-    @Override
-    public void init() {
+    public SoftwareMedium() {
         networkNodes.add(this);
     }
 
     @Override
     public void send(Message message) {
-        super.send(message);
-
         networkNodes.forEach(node -> node.receive(message));
     }
 }

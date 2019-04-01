@@ -11,21 +11,15 @@ public class Node implements MessageReceiveListener {
     private HashSet<UUID> seenMessages = new HashSet<UUID>();
 
     public final int id = nodeCounter++;
-    public CommunicationMedium medium;
-    public CommunicationManager manager;
-    public RoutingAlgorithm router;
+    public Medium medium;
+    public Router router;
 
-    public Node(CommunicationMedium medium,
-                CommunicationManager manager,
-                RoutingAlgorithm router) {
+    public Node(Medium medium,
+                Router router) {
         this.medium = medium;
-        this.manager = manager;
         this.router = router;
 
-        medium.onReceive(router);
-        medium.onSend(router);
-
-        manager.addCommunicationMedium(medium);
+        router.connectMedium(medium);
 
         medium.onReceive(this);
     }
