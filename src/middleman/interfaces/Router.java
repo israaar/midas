@@ -22,16 +22,6 @@
  */
 package middleman.interfaces;
 
-public abstract class Router
-    implements MessageReceiveListener, MessageSendListener {
-    private Medium medium;
+public abstract class Router extends Component implements MessageSendListener {
 
-    public void connectMedium(Medium medium) {
-        this.medium = medium;
-        medium.onReceive(this);
-    }
-
-    protected void send(Message message) {
-        this.medium.send(message);
-    }
 }
