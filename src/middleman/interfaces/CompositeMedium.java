@@ -25,7 +25,6 @@ package middleman.interfaces;
 import java.util.ArrayList;
 
 public class CompositeMedium extends Medium implements MessageReceiveListener {
-    private ArrayList<MessageSendListener> sendListeners = new ArrayList<>();
     private ArrayList<Medium> media = new ArrayList<>();
 
     public CompositeMedium(Medium ... media) {
@@ -43,34 +42,13 @@ public class CompositeMedium extends Medium implements MessageReceiveListener {
         return media;
     }
 
-    /**
-     * Sends the given message via the medium
-     *
-     * @param message The message to send
-     */
     @Override
-    public void send(Message message) {
-        sendListeners.forEach(listener -> listener.onMessageSent(message));
+    protected void sendImpl(Message message) {
         media.forEach(medium -> medium.send(message));
-    }
-
-    /**
-     * Registers the given MessageSendListener so that it will be notified whenever
-     * a message is sent
-     *
-     * @param MessageSendListener The MessageSendListener to notify
-     */
-    public void onSend(MessageSendListener MessageSendListener) {
-        sendListeners.add(MessageSendListener);
     }
 
     @Override
     public void onMessageReceived(Message message) {
         this.receive(message);
-    }
-
-    public void connectRouter(Router router) {
-        this.onSend(router);
-        this.onReceive(router);
     }
 }

@@ -34,7 +34,7 @@ public class SoftwareMedium extends Medium {
     }
 
     @Override
-    public void send(Message message) {
+    protected void sendImpl(Message message) {
         networkNodes.forEach(node -> node.receive(message));
     }
 }

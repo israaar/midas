@@ -23,5 +23,9 @@
 package middleman.interfaces;
 
 public abstract class Router extends Component implements MessageSendListener {
-
+    @Override
+    public void connectMedium(Medium medium) {
+        super.connectMedium(medium);
+        medium.onSend(this);
+    }
 }
