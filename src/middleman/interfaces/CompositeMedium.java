@@ -1,17 +1,7 @@
-/*
- * CompositeMedium.java
- *
- * Version:
- *     $Id$
- *
- *     0.1
- *
- * Revisions:
- *     $Log$
- *
- *     Implementation 0.1
- *
- */
+package middleman.interfaces;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * This class is the underlying structure of the CompositeMedium
@@ -20,12 +10,9 @@
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-package middleman.interfaces;
-
-import java.util.ArrayList;
-
-public class CompositeMedium extends Medium implements MessageReceiveListener {
+public class CompositeMedium extends Medium {
     private ArrayList<Medium> media = new ArrayList<>();
+    private MessagePasser passer = new MessagePasser();
 
     public CompositeMedium(Medium ... media) {
         for (Medium m : media) {
@@ -35,7 +22,7 @@ public class CompositeMedium extends Medium implements MessageReceiveListener {
 
     public void addMedium(Medium medium) {
         media.add(medium);
-        medium.onReceive(this);
+        medium.onReceive(passer);
     }
 
     public ArrayList<Medium> getMedia() {
@@ -43,12 +30,19 @@ public class CompositeMedium extends Medium implements MessageReceiveListener {
     }
 
     @Override
-    protected void sendImpl(Message message) {
+    public void send(Message<?> message) {
         media.forEach(medium -> medium.send(message));
     }
 
-    @Override
-    public void onMessageReceived(Message message) {
+    private void onMessageReceived(Message<?> message) {
         this.receive(message);
+    }
+
+    private class MessagePasser extends Component<Serializable> {
+
+        @Override
+        public void onMessageReceived(Message<Serializable> message) {
+            CompositeMedium.this.onMessageReceived(message);
+        }
     }
 }

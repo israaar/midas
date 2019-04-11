@@ -1,17 +1,8 @@
-/*
- * SoftwareMedium.java
- *
- * Version:
- *     $Id$
- *
- *     0.1
- *
- * Revisions:
- *     $Log$
- *
- *     Implementation 0.1
- *
- */
+package middleman.implementations;
+
+import java.util.ArrayList;
+
+import middleman.interfaces.*;
 
 /**
  * This class is the underlying structure of the SoftwareMedium
@@ -20,12 +11,6 @@
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-package middleman.implementations;
-
-import java.util.ArrayList;
-
-import middleman.interfaces.*;
-
 public class SoftwareMedium extends Medium {
     private static ArrayList<SoftwareMedium> networkNodes = new ArrayList<>();
 
@@ -33,8 +18,7 @@ public class SoftwareMedium extends Medium {
         networkNodes.add(this);
     }
 
-    @Override
-    protected void sendImpl(Message message) {
+    public void send(Message<?> message) {
         networkNodes.forEach(node -> node.receive(message));
     }
 }

@@ -1,17 +1,7 @@
-/*
- * Medium.java
- *
- * Version:
- *     $Id$
- *
- *     0.1
- *
- * Revisions:
- *     $Log$
- *
- *     Implementation 0.1
- *
- */
+package middleman.interfaces;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * This class is the underlying structure of the Medium
@@ -20,60 +10,47 @@
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-package middleman.interfaces;
-
-import java.util.ArrayList;
-
 public abstract class Medium {
-    private ArrayList<MessageSendListener> sendListeners = new ArrayList<>();
-    private ArrayList<MessageReceiveListener> receiveListeners = new ArrayList<>();
-
-    /**
-     * Sends the given message via the medium. This method is used as a wrapper
-     * to ensure that send listeners are called without needing a super() call.
-     * The sendImpl() method should implement the actual sending of a message.
-     *
-     * @param message The message to send
-     */
-    public final void send(Message message) {
-        sendListeners.forEach(listener -> listener.onMessageSent(message));
-        sendImpl(message);
-    }
+    private ArrayList<Component<?>> components = new ArrayList<>();
 
     /**
      * Sends the given message (implementation specific).
      *
      * @param message The message to send
      */
-    protected abstract void sendImpl(Message message);
+    public abstract void send(Message<?> message);
 
     /**
      * Called internally whenever a message is received. Notifies all registered
-     * MessageReceiveListeners.
+     * Components.
      *
      * @param message The message that has been received
      */
-    protected final void receive(Message message) {
-        receiveListeners.forEach(listener -> listener.onMessageReceived(message));
+    protected final void receive(Message<?> message) {
+        components.forEach(comp -> sendMessageToComponent(comp, message));
     }
 
     /**
-     * Registers the given MessageSendListener so that it will be notified whenever
-     * a message is sent
-     *
-     * @param MessageSendListener The MessageSendListener to notify
-     */
-    public final void onSend(MessageSendListener MessageSendListener) {
-        sendListeners.add(MessageSendListener);
-    }
-
-    /**
-     * Registers the given MessageReceiveListener so that it will be notified whenever
+     * Registers the given Component so that it will be notified whenever
      * a message is received
      *
-     * @param MessageReceiveListener The MessageReceiveListener to notify
+     * @param Component The Component to notify
      */
-    public final void onReceive(MessageReceiveListener MessageReceiveListener) {
-        receiveListeners.add(MessageReceiveListener);
+    public final void onReceive(Component<?> Component) {
+        components.add(Component);
+    }
+
+    @SuppressWarnings("unchecked")
+    private final <T extends Serializable> void sendMessageToComponent(Component<T> comp, Message<?> msg) {
+        
+        // TODO: figure out more specific exception type to use
+        // Intended to catch errors in the case of a type mismatch
+        try {
+            if (comp.getClass().getCanonicalName().equals(msg.compId) && msg.appId == Message.staticAppId) {
+                comp.onMessageReceived((Message<T>) msg);
+            }
+        } catch (Exception e) {
+            // TODO: print error?
+        }
     }
 }

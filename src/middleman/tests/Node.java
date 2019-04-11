@@ -12,16 +12,16 @@ public class Node implements MessageReceiveListener {
 
     public final int id = nodeCounter++;
     public Medium medium;
-    public Router router;
+    public Component comp;
 
     public Node(Medium medium,
-                Router router) {
+        Component comp) {
         this.medium = medium;
-        this.router = router;
+        this.comp = comp;
 
-        router.connectMedium(medium);
+        comp.connectMedium(medium);
 
-        medium.onReceive(this);
+        medium.onReceive(comp);
     }
 
     @Override

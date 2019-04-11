@@ -1,17 +1,6 @@
-/*
- * MessageReceiveListener.java
- *
- * Version:
- *     $Id$
- *
- *     0.1
- *
- * Revisions:
- *     $Log$
- *
- *     Implementation 0.1
- *
- */
+package middleman.interfaces;
+
+import java.io.Serializable;
 
 /**
  * This class is the underlying structure of the MessageReceiveListener
@@ -20,9 +9,6 @@
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-package middleman.interfaces;
-
-
-public interface MessageReceiveListener {
-    void onMessageReceived(Message message);
+public interface MessageReceiveListener<T extends Serializable> {
+    void onMessageReceived(Message<T> message);
 }

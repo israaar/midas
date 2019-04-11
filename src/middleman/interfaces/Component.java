@@ -1,6 +1,15 @@
 package middleman.interfaces;
 
-public abstract class Component implements MessageReceiveListener {
+import java.io.Serializable;
+
+/**
+ * This class is the underlying structure of the Medium
+ *
+ * @author Jesse Saran
+ * @author Kyle Cutler
+ * @author Allahsera Auguste Tapo
+ */
+public abstract class Component<T extends Serializable> implements MessageReceiveListener<T> {
     private Medium medium;
 
     public void connectMedium(Medium medium) {
@@ -8,7 +17,7 @@ public abstract class Component implements MessageReceiveListener {
         medium.onReceive(this);
     }
 
-    protected void send(Message message) {
+    protected void send(Message<T> message) {
         this.medium.send(message);
     }
 }

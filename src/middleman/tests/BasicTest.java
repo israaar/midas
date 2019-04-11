@@ -12,7 +12,7 @@ public class BasicTest {
         for (int i = 0; i < 10; i++) {
             nodes.add(new Node(
                 new CompositeMedium(new SoftwareMedium()),
-                new BasicRouting()
+                new MessageBroadcaster()
             ));
         }
 
