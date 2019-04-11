@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import middleman.implementations.*;
 import middleman.interfaces.*;
 
+/**
+ * This class runs a basic floodfill algorithm
+ *
+ * @author Jesse Saran
+ * @author Kyle Cutler
+ * @author Allahsera Auguste Tapo
+ */
 public class BasicTest {
     public static void main(String[] args) {
         Message.setStaticAppId("BasicTest");

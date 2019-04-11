@@ -3,6 +3,14 @@ package middleman.tests;
 import middleman.interfaces.*;
 import middleman.implementations.MessageBroadcaster;
 
+
+/**
+ * This class represents a basic node structure to be used throughout the basic tests
+ *
+ * @author Jesse Saran
+ * @author Kyle Cutler
+ * @author Allahsera Auguste Tapo
+ */
 public class Node implements MessageReceiveListener<String> {
     private static int nodeCounter = 0;
 
