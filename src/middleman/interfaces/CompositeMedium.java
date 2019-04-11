@@ -44,5 +44,10 @@ public class CompositeMedium extends Medium {
         public void onMessageReceived(Message<Serializable> message) {
             CompositeMedium.this.onMessageReceived(message);
         }
+
+        @Override
+        public boolean shouldHandleMessage(Message<?> m) {
+            return true;
+        }
     }
 }

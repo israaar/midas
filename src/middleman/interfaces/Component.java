@@ -20,4 +20,12 @@ public abstract class Component<T extends Serializable> implements MessageReceiv
     protected void send(Message<T> message) {
         this.medium.send(message);
     }
+
+    public String getComponentId() {
+        return this.getClass().getCanonicalName();
+    }
+
+    public boolean shouldHandleMessage(Message<?> m) {
+        return this.getClass().getCanonicalName().equals(m.compId);
+    }
 }

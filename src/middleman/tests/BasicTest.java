@@ -7,6 +7,7 @@ import middleman.interfaces.*;
 
 public class BasicTest {
     public static void main(String[] args) {
+        Message.setStaticAppId("BasicTest");
         ArrayList<Node> nodes = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
@@ -16,8 +17,6 @@ public class BasicTest {
             ));
         }
 
-        nodes.get(0).medium.send(new Message(
-            "Hello MiddleMan!".getBytes()
-        ));
+        nodes.get(0).comp.send("Hello Middleman!");
     }
 }

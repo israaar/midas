@@ -20,19 +20,19 @@ public class Message<T extends Serializable> implements Serializable {
     public final String compId;
     public final T payload;
 
-    public Message(String compId) {
-        this(UUID.randomUUID(), compId);
+    public Message(Component<?> component) {
+        this(UUID.randomUUID(), component);
     }
 
-    public Message(T payload, String compId) {
-        this(UUID.randomUUID(), payload, compId);
+    public Message(T payload, Component<?> component) {
+        this(UUID.randomUUID(), payload, component);
     }
 
-    public Message(UUID id, String compId) {
-        this(id, null, compId);
+    public Message(UUID id, Component<?> component) {
+        this(id, null, component);
     }
 
-    public Message(UUID id, T payload, String compId) {
+    public Message(UUID id, T payload, Component<?> component) {
         if (staticAppId == null) {
             throw new RuntimeException("Message.staticAppId must be set!");
         }
@@ -40,7 +40,7 @@ public class Message<T extends Serializable> implements Serializable {
         this.id = id;
         this.payload = payload;
         this.appId = staticAppId;
-        this.compId = compId;
+        this.compId = component.getComponentId();
     }
 
     public static void setStaticAppId(String appId) {

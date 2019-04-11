@@ -1,37 +1,30 @@
 package middleman.tests;
 
-import java.util.HashSet;
-import java.util.UUID;
-
 import middleman.interfaces.*;
+import middleman.implementations.MessageBroadcaster;
 
-public class Node implements MessageReceiveListener {
+public class Node implements MessageReceiveListener<String> {
     private static int nodeCounter = 0;
-
-    private HashSet<UUID> seenMessages = new HashSet<UUID>();
 
     public final int id = nodeCounter++;
     public Medium medium;
-    public Component comp;
+    public MessageBroadcaster comp;
 
     public Node(Medium medium,
-        Component comp) {
+        MessageBroadcaster comp) {
         this.medium = medium;
         this.comp = comp;
 
         comp.connectMedium(medium);
-
-        medium.onReceive(comp);
+        comp.onReceive(this);
     }
 
     @Override
-    public void onMessageReceived(Message msg) {
-        if (seenMessages.add(msg.id)) {
-            System.out.println(
-                id + ": "
-                + msg.id + ", "
-                + new String(msg.payload)
-            );
-        }
+    public void onMessageReceived(Message<String> msg) {
+        System.out.println(
+            id + ": "
+            + msg.id + ", "
+            + msg.payload
+        );
     }
 }

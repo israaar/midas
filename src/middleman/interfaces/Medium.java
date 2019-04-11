@@ -42,15 +42,19 @@ public abstract class Medium {
 
     @SuppressWarnings("unchecked")
     private final <T extends Serializable> void sendMessageToComponent(Component<T> comp, Message<?> msg) {
-        
+
         // TODO: figure out more specific exception type to use
         // Intended to catch errors in the case of a type mismatch
         try {
-            if (comp.getClass().getCanonicalName().equals(msg.compId) && msg.appId == Message.staticAppId) {
+            if (msg.appId.equals(Message.staticAppId) && comp.shouldHandleMessage(msg)) {
                 comp.onMessageReceived((Message<T>) msg);
+            } else {
+                // TODO: figure out a way to make this configurable
+                // System.err.println("Mismatch1 " + comp.shouldHandleMessage(msg));
             }
         } catch (Exception e) {
             // TODO: print error?
+            // e.printStackTrace();
         }
     }
 }
