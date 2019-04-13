@@ -1,8 +1,7 @@
 package middleman.tests;
 
-import middleman.interfaces.*;
+import middleman.MiddleMan;
 import middleman.implementations.MessageBroadcaster;
-
 
 /**
  * This class represents a basic node structure to be used throughout the basic tests
@@ -11,28 +10,24 @@ import middleman.implementations.MessageBroadcaster;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public class Node implements MessageReceiveListener<String> {
+public class Node {
     private static int nodeCounter = 0;
-
     public final int id = nodeCounter++;
-    public Medium medium;
-    public MessageBroadcaster comp;
 
-    public Node(Medium medium,
-        MessageBroadcaster comp) {
-        this.medium = medium;
-        this.comp = comp;
+    private MiddleMan middleman;
 
-        comp.connectMedium(medium);
-        comp.onReceive(this);
+    public Node(MiddleMan middleman) {
+        this.middleman = middleman;
+
+        middleman.getComponent(MessageBroadcaster.class)
+            .onReceive(msg -> System.out.println(
+                id + ": "
+                + msg.id + ", "
+                + msg.payload
+            ));
     }
 
-    @Override
-    public void onMessageReceived(Message<String> msg) {
-        System.out.println(
-            id + ": "
-            + msg.id + ", "
-            + msg.payload
-        );
+    public void send(String msg) {
+        middleman.getComponent(MessageBroadcaster.class).send(msg);
     }
 }

@@ -3,6 +3,8 @@ package middleman.interfaces;
 import java.io.Serializable;
 import java.util.UUID;
 
+import middleman.MiddleMan;
+
 /**
  * This class is the underlying structure of the Message
  *
@@ -12,8 +14,6 @@ import java.util.UUID;
  */
 public class Message<T extends Serializable> implements Serializable {
     private static final long serialVersionUID = 1;
-
-    public static String staticAppId;
 
     public final UUID id;
     public final String appId;
@@ -33,21 +33,9 @@ public class Message<T extends Serializable> implements Serializable {
     }
 
     public Message(UUID id, T payload, Component<?> component) {
-        if (staticAppId == null) {
-            throw new RuntimeException("Message.staticAppId must be set!");
-        }
-
         this.id = id;
         this.payload = payload;
-        this.appId = staticAppId;
+        this.appId = component.getMiddleMan().getAppName();
         this.compId = component.getComponentId();
-    }
-
-    public static void setStaticAppId(String appId) {
-        if (appId == null) {
-            throw new IllegalArgumentException("AppId must not be null");
-        }
-
-        staticAppId = appId;
     }
 }

@@ -3,6 +3,8 @@ package middleman.interfaces;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import middleman.MiddleMan;
+
 /**
  * This class is the underlying structure of the Medium
  *
@@ -11,7 +13,7 @@ import java.util.ArrayList;
  * @author Allahsera Auguste Tapo
  */
 public abstract class Medium {
-    private ArrayList<Component<?>> components = new ArrayList<>();
+    protected MiddleMan middleman;
 
     /**
      * Sends the given message (implementation specific).
@@ -26,35 +28,18 @@ public abstract class Medium {
      *
      * @param message The message that has been received
      */
-    protected final void receive(Message<?> message) {
-        components.forEach(comp -> sendMessageToComponent(comp, message));
+    protected final void receive(Message<?> msg) {
+        if (this.middleman != null) {
+            this.middleman.onMessageReceived(msg);
+        }
     }
 
     /**
-     * Registers the given Component so that it will be notified whenever
-     * a message is received
+     * Attaches this Medium to the given MiddleMan
      *
      * @param Component The Component to notify
      */
-    public final void onReceive(Component<?> Component) {
-        components.add(Component);
-    }
-
-    @SuppressWarnings("unchecked")
-    private final <T extends Serializable> void sendMessageToComponent(Component<T> comp, Message<?> msg) {
-
-        // TODO: figure out more specific exception type to use
-        // Intended to catch errors in the case of a type mismatch
-        try {
-            if (msg.appId.equals(Message.staticAppId) && comp.shouldHandleMessage(msg)) {
-                comp.onMessageReceived((Message<T>) msg);
-            } else {
-                // TODO: figure out a way to make this configurable
-                // System.err.println("Mismatch1 " + comp.shouldHandleMessage(msg));
-            }
-        } catch (Exception e) {
-            // TODO: print error?
-            // e.printStackTrace();
-        }
+    public final void attach(MiddleMan middleman) {
+        this.middleman = middleman;
     }
 }

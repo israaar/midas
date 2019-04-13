@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
+import middleman.MiddleMan;
 import middleman.interfaces.*;
 
 /**

@@ -2,6 +2,7 @@ package middleman.tests;
 
 import java.util.ArrayList;
 
+import middleman.MiddleMan;
 import middleman.implementations.*;
 import middleman.interfaces.*;
 
@@ -14,16 +15,16 @@ import middleman.interfaces.*;
  */
 public class BasicTest {
     public static void main(String[] args) {
-        Message.setStaticAppId("BasicTest");
         ArrayList<Node> nodes = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             nodes.add(new Node(
-                new CompositeMedium(new SoftwareMedium()),
-                new MessageBroadcaster()
+                new MiddleMan("BasicTest")
+                    .addComponent(new MessageBroadcaster())
+                    .addMedium(new SoftwareMedium())
             ));
         }
 
-        nodes.get(0).comp.send("Hello Middleman!");
+        nodes.get(0).send("Hello Middleman!");
     }
 }
