@@ -19,6 +19,7 @@ public class SoftwareMedium extends Medium {
     }
 
     public void send(Message<?> message) {
+        System.out.println(message);
         networkNodes.forEach(node -> node.receive(message));
     }
 }

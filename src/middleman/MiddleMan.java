@@ -102,7 +102,9 @@ public class MiddleMan {
             return (T) dispatchers.get(cls);
         }
 
-        throw new RuntimeException("Class Dispatcher has not been added to this instance MiddleMan");
+        throw new RuntimeException("Dispatcher "
+            + cls.getCanonicalName()
+            + " has not been added to this instance of MiddleMan");
     }
 
     public String getAppName() {

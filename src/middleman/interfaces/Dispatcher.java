@@ -15,7 +15,7 @@ public abstract class Dispatcher<T extends Component> {
     private MiddleMan middleman;
     private ConcurrentHashMap<T, Object> invocations = new ConcurrentHashMap<>();
 
-    public final void attach(MiddleMan middleman) {
+    public void attach(MiddleMan middleman) {
         if (this.middleman != null) {
             throw new IllegalStateException("Can only attach Dispatcher once." +
                 " If added as component to a Dispatcher object, attach is already called.");

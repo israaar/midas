@@ -17,10 +17,10 @@ public class CountTest {
     public static void main(String[] args) {
         ArrayList<MiddleMan> nodes = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             nodes.add(
-                new MiddleMan("BasicTest")
-                    .addDispatcher(new NodeCounter.Dispatcher(1000, 400))
+                new MiddleMan("CountTest")
+                    .addDispatcher(new NodeCounter.Dispatcher(2000, 1000))
                     .addMedium(new SoftwareMedium())
             );
         }

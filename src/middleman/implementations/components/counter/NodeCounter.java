@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
+import middleman.MiddleMan;
 import middleman.implementations.components.heartbeat.HeartbeatReceiver;
 import middleman.implementations.components.heartbeat.HeartbeatSender;
 import middleman.interfaces.Component;
@@ -72,8 +73,10 @@ public class NodeCounter extends Component {
         try {
             Thread.sleep(timeoutMillis);
         } catch (InterruptedException e) {
-            // SHOULD not be interrupted here, but just in case :)
-            return;
+            if (this.isCancelled) {
+                this.state = State.COMPLETE;
+                return;
+            }
         }
 
         this.state = State.RUNNING;
@@ -111,7 +114,7 @@ public class NodeCounter extends Component {
                 .getDispatcher(HeartbeatReceiver.Dispatcher.class)
                 .dispatch(
                     message.payload.recipientID,
-                    heartbeatMillis,
+                    timeoutMillis,
                     () -> this.removeHeartbeat(message.payload.recipientID)
                 );
 
@@ -149,11 +152,21 @@ public class NodeCounter extends Component {
         }
 
         public NodeCounter dispatch(Consumer<Integer> callback) {
+            UUID id = UUID.randomUUID();
+            seenIds.put(id, 0);
+
             return new NodeCounter(
                 this, callback,
-                UUID.randomUUID(), UUID.randomUUID(),
+                id, UUID.randomUUID(),
                 timeoutMillis, heartbeatMillis
             );
+        }
+
+        public void attach(MiddleMan middleman) {
+            super.attach(middleman);
+
+            middleman.addDispatcher(new HeartbeatSender.Dispatcher());
+            middleman.addDispatcher(new HeartbeatReceiver.Dispatcher());
         }
 
         @Override
@@ -171,7 +184,7 @@ public class NodeCounter extends Component {
 
                     // ignore cycles
                     if (!seenIds.contains(message.id)) {
-                        seenIds.put(message.id, null);
+                        seenIds.put(message.id, 0);
 
                         UUID senderID = UUID.randomUUID();
 
@@ -217,7 +230,7 @@ public class NodeCounter extends Component {
                             senderID,
                             timeoutMillis,
                             heartbeatMillis
-                        );
+                        ).start();
                     }
                     break;
                 case ACK:
@@ -253,6 +266,11 @@ public class NodeCounter extends Component {
             this.senderID = senderID;
             this.recipientID = recipientID;
             this.result = result;
+        }
+
+        @Override
+        public String toString() {
+            return "NCM: " + type + " " + senderID + " " + recipientID + " " + result;
         }
 
         public static NodeCounterMessage makeInvoke(UUID senderID) {

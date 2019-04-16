@@ -36,4 +36,12 @@ public class Message<T extends Serializable> implements Serializable {
         this.appId = dispatcher.getMiddleMan().getAppName();
         this.dispId = dispatcher.getDispatcherId();
     }
+
+    @Override
+    public String toString() {
+        return "Msg: " + id
+            + "\n  App ID: " + appId
+            + "\n  Dispatcher ID: " + dispId
+            + "\n  Payload:" + ("\n" + payload).replace("\n", "\n    ");
+    }
 }
