@@ -1,6 +1,7 @@
 package middleman.implementations.components.counter;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -90,7 +91,7 @@ public class NodeCounter extends Component {
                 // again, shouldn't happen unless we cancelled.
             }
         }
-
+        // System.out.println("Cancelling: isCancelled[" + this.isCancelled + "] isEmpty[" + this.neighbors.isEmpty() + "]");
         this.state = State.COMPLETE;
 
         if (!this.isCancelled) {
@@ -103,9 +104,10 @@ public class NodeCounter extends Component {
         for (HeartbeatReceiver r : this.neighbors) {
             r.cancel();
         }
+        // System.out.println("Cleanup: " + id);
     }
 
-    public void onReceiveAcknowledgement(Message<NodeCounterMessage> message) {
+    public synchronized void onReceiveAcknowledgement(Message<NodeCounterMessage> message) {
         if (this.state != State.COMPLETE
             && message.id.equals(this.id)
             && message.payload.senderID.equals(this.senderID)) {
@@ -125,14 +127,26 @@ public class NodeCounter extends Component {
     }
 
     public synchronized void removeHeartbeat(UUID recipientID) {
-        this.neighbors.removeIf(hb -> hb.id.equals(recipientID));
+        HeartbeatReceiver hb = null;
+        Iterator<HeartbeatReceiver> it = this.neighbors.iterator();
+
+        while (it.hasNext()) {
+            hb = it.next();
+
+            if (hb.id.equals(recipientID)) {
+                it.remove();
+                hb.cancel();
+            }
+        }
 
         if (this.neighbors.isEmpty()) {
+            System.out.println("IS EMPTY: " + senderID);
             this.notifyAll();
         }
     }
 
-    public void onReceiveResult(Message<NodeCounterMessage> message) {
+    public synchronized void onReceiveResult(Message<NodeCounterMessage> message) {
+        // System.out.println("Receive Result: " + id);
         if (message.id.equals(this.id)
             && message.payload.senderID.equals(senderID)) {
 
@@ -183,7 +197,7 @@ public class NodeCounter extends Component {
                 case INVOKE:
 
                     // ignore cycles
-                    if (!seenIds.contains(message.id)) {
+                    if (!seenIds.containsKey(message.id)) {
                         seenIds.put(message.id, 0);
 
                         UUID senderID = UUID.randomUUID();
