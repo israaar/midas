@@ -11,59 +11,54 @@ import middleman.interfaces.*;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public class HeartbeatSender extends Component<String> {
-    /**
-     * Starts a heartbeat
-     *
-     * @param id  An id that HeartbeatListeners can listen for in order to
-     *            communicate specifically with this node
-     * @param delayMillis  The time to pause between sending heartbeat messages
-     * @return  a started invocation
-     */
-    public Invocation start(UUID id, int delayMillis) {
-        return new Invocation(id, delayMillis);
+public class HeartbeatSender extends Component {
+    private UUID id;
+    private int delayMillis;
+    private boolean isCancelled;
+
+    private HeartbeatSender(Dispatcher dispatcher, UUID id, int delayMillis) {
+        super(dispatcher);
+
+        this.id = id;
+        this.delayMillis = delayMillis;
+    }
+
+    public void stop() {
+        this.isCancelled = false;
+        super.thread.interrupt();
     }
 
     @Override
-    public void onMessageReceived(Message<String> message) {
-        // HeartbeatSender doesn't listen for messages
+    protected void run() {
+        try {
+            while (!isCancelled) {
+                send(new Message<String>(id, "", getDispatcher()));
+                Thread.sleep(delayMillis);
+            }
+        } catch (InterruptedException ex) {}
     }
 
-    @Override
-    public boolean shouldHandleMessage(Message<?> m) {
-        return false;
-    }
-
-    public class Invocation {
-        private UUID id;
-        private int delayMillis;
-        private boolean isCancelled;
-
-        private Thread thread;
-
-        public Invocation(UUID id, int delayMillis) {
-            this.id = id;
-            this.delayMillis = delayMillis;
-            this.thread = new Thread(this::run);
-
-            this.thread.start();
-        }
-
-        public void stop() {
-            this.isCancelled = false;
-            this.thread.interrupt();
-        }
-
+    public static class Dispatcher extends middleman.interfaces.Dispatcher<HeartbeatSender> {
         /**
-         * Private function for running the heartbeat
+         * Starts a heartbeat
+         *
+         * @param id  An id that HeartbeatListeners can listen for in order to
+         *            communicate specifically with this node
+         * @param delayMillis  The time to pause between sending heartbeat messages
+         * @return  a started invocation
          */
-        private void run() {
-            try {
-                while (!isCancelled) {
-                    send(new Message<String>(id, "", HeartbeatSender.this));
-                    Thread.sleep(delayMillis);
-                }
-            } catch (InterruptedException ex) {}
+        public HeartbeatSender dispatch(UUID id, int delayMillis) {
+            return new HeartbeatSender(this, id, delayMillis);
+        }
+
+        @Override
+        public void handleMessage(Message<?> message) {
+            // HeartbeatSender doesn't listen for messages
+        }
+
+        @Override
+        public boolean shouldHandleMessage(Message<?> m) {
+            return false;
         }
     }
 }

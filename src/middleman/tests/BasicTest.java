@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import middleman.MiddleMan;
 import middleman.implementations.*;
-import middleman.interfaces.*;
 
 /**
  * This class runs a basic floodfill algorithm
@@ -20,11 +19,37 @@ public class BasicTest {
         for (int i = 0; i < 10; i++) {
             nodes.add(new Node(
                 new MiddleMan("BasicTest")
-                    .addComponent(new MessageBroadcaster())
+                    .addDispatcher(new MessageBroadcaster.Dispatcher())
                     .addMedium(new SoftwareMedium())
             ));
         }
 
         nodes.get(0).send("Hello Middleman!");
+        nodes.get(0).bc.cancel();
+    }
+
+    private static class Node {
+        private static int nodeCounter = 0;
+        public final int id = nodeCounter++;
+
+        public MessageBroadcaster bc;
+
+        public Node(MiddleMan middleman) {
+            bc = middleman
+                    .getDispatcher(MessageBroadcaster.Dispatcher.class)
+                    .dispatch(msg -> {
+                        System.out.println(
+                            id + ": "
+                            + msg.id + ", "
+                            + msg.payload
+                        );
+                        bc.cancel();
+                    });
+            bc.start();
+        }
+
+        public void send(String msg) {
+            bc.send(msg);
+        }
     }
 }

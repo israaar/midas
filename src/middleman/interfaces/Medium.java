@@ -1,8 +1,5 @@
 package middleman.interfaces;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import middleman.MiddleMan;
 
 /**

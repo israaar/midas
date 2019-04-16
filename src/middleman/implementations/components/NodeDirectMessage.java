@@ -1,15 +1,18 @@
 package middleman.implementations.components;
 
-import middleman.interfaces.Component;
-import middleman.interfaces.Message;
+import middleman.interfaces.*;
 
 class NodeDirectMessage extends Component {
-    public NodeDirectMessage() {
+    public NodeDirectMessage(Dispatcher<NodeDirectMessage> d) {
+        super(d);
+    }
+
+    public void onMessageReceived(Message<?> message) {
         // TODO
     }
 
     @Override
-    public void onMessageReceived(Message message) {
-        // TODO
+    protected void run() {
+
     }
 }

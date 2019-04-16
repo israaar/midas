@@ -3,8 +3,6 @@ package middleman.interfaces;
 import java.io.Serializable;
 import java.util.UUID;
 
-import middleman.MiddleMan;
-
 /**
  * This class is the underlying structure of the Message
  *
@@ -17,25 +15,25 @@ public class Message<T extends Serializable> implements Serializable {
 
     public final UUID id;
     public final String appId;
-    public final String compId;
+    public final String dispId;
     public final T payload;
 
-    public Message(Component<?> component) {
-        this(UUID.randomUUID(), component);
+    public Message(Dispatcher<?> dispatcher) {
+        this(UUID.randomUUID(), dispatcher);
     }
 
-    public Message(T payload, Component<?> component) {
-        this(UUID.randomUUID(), payload, component);
+    public Message(T payload, Dispatcher<?> dispatcher) {
+        this(UUID.randomUUID(), payload, dispatcher);
     }
 
-    public Message(UUID id, Component<?> component) {
-        this(id, null, component);
+    public Message(UUID id, Dispatcher<?> dispatcher) {
+        this(id, null, dispatcher);
     }
 
-    public Message(UUID id, T payload, Component<?> component) {
+    public Message(UUID id, T payload, Dispatcher<?> dispatcher) {
         this.id = id;
         this.payload = payload;
-        this.appId = component.getMiddleMan().getAppName();
-        this.compId = component.getComponentId();
+        this.appId = dispatcher.getMiddleMan().getAppName();
+        this.dispId = dispatcher.getDispatcherId();
     }
 }

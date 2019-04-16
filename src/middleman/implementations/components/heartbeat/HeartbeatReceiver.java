@@ -1,5 +1,6 @@
 package middleman.implementations.components.heartbeat;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import middleman.interfaces.*;
@@ -11,88 +12,83 @@ import middleman.interfaces.*;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public class HeartbeatReceiver extends Component<String> {
-    private ConcurrentHashMap<Invocation, Object> activeInvocations = new ConcurrentHashMap<>();
+public class HeartbeatReceiver extends Component {
+    private final int timeoutMillis;
+    public final UUID id;
 
-    /**
-     * Starts a heartbeat
-     *
-     * @param id  An id that HeartbeatListeners can listen for in order to
-     *            communicate specifically with this node
-     * @param timeoutMillis  The time to wait for heartbeat before timeout
-     * @return  a started invocation
-     */
-    public Invocation start(String id, int timeoutMillis, TimeoutListener onTimeout) {
-        return new Invocation(id, timeoutMillis, onTimeout);
+    private TimeoutListener onTimeout;
+    private boolean isCancelled = false;
+
+    private HeartbeatReceiver(Dispatcher dispatcher, UUID id, int timeoutMillis, TimeoutListener onTimeout) {
+        super(dispatcher);
+
+        this.id = id;
+        this.timeoutMillis = timeoutMillis;
+        this.onTimeout = onTimeout;
     }
 
+    /**
+     * Cancel the thread. Will stop listening for heartbeats.
+     */
+    public void cancel() {
+        this.isCancelled = true;
+        this.thread.interrupt();
+    }
+
+    /**
+     * Private function for listening for heartbeat messages
+     */
     @Override
-    public void onMessageReceived(Message<String> message) {
-        for (Invocation i : activeInvocations.keySet()) {
-            i.onMessageReceived(message);
+    protected void run() {
+        while (!this.isCancelled) {
+            try {
+                Thread.sleep(timeoutMillis);
+
+                if (this.onTimeout != null) {
+                    this.onTimeout.onTimeout();
+                }
+
+                break;
+            } catch (InterruptedException ex) {}
         }
     }
 
-    @Override
-    public boolean shouldHandleMessage(Message<?> m) {
-        return HeartbeatSender.class.getCanonicalName().equals(m.compId);
+    private void onMessageReceived(Message<String> message) {
+        if (message.id.equals(id)) {
+            thread.interrupt();
+        }
     }
 
     public static interface TimeoutListener {
         public void onTimeout();
     }
 
-    public class Invocation implements MessageReceiveListener<String> {
-        private final int timeoutMillis;
-        private final String id;
-
-        private final Thread thread;
-        private TimeoutListener onTimeout;
-        private boolean isCancelled = false;
-
-        public Invocation(String id, int timeoutMillis, TimeoutListener onTimeout) {
-            this.id = id;
-            this.timeoutMillis = timeoutMillis;
-            this.onTimeout = onTimeout;
-            this.thread = new Thread(this::run);
-
-            this.thread.start();
-        }
+    public static class Dispatcher extends middleman.interfaces.Dispatcher<HeartbeatReceiver> {
+        private ConcurrentHashMap<HeartbeatReceiver, Object> activeInvocations = new ConcurrentHashMap<>();
 
         /**
-         * Cancel the thread. Will stop listening for heartbeats.
+         * Starts a heartbeat
+         *
+         * @param id  An id that HeartbeatListeners can listen for in order to
+         *            communicate specifically with this node
+         * @param timeoutMillis  The time to wait for heartbeat before timeout
+         * @return  a started invocation
          */
-        public void cancel() {
-            this.isCancelled = true;
-            this.thread.interrupt();
+        public HeartbeatReceiver dispatch(UUID id, int timeoutMillis, TimeoutListener onTimeout) {
+            return new HeartbeatReceiver(this, id, timeoutMillis, onTimeout);
         }
 
-        /**
-         * Private function for listening for heartbeat messages
-         */
-        private void run() {
-            activeInvocations.put(this, null);
-
-            while (!this.isCancelled) {
-                try {
-                    Thread.sleep(timeoutMillis);
-
-                    if (this.onTimeout != null) {
-                        this.onTimeout.onTimeout();
-                    }
-
-                    break;
-                } catch (InterruptedException ex) {}
+        @SuppressWarnings("unchecked")
+        @Override
+        public void handleMessage(Message<?> message) {
+            for (HeartbeatReceiver i : activeInvocations.keySet()) {
+                i.onMessageReceived((Message<String>) message);
             }
-
-            activeInvocations.remove(this);
         }
 
         @Override
-        public void onMessageReceived(Message<String> message) {
-            if (message.payload.equals(id)) {
-                thread.interrupt();
-            }
+        public boolean shouldHandleMessage(Message<?> m) {
+            return HeartbeatSender.Dispatcher.class.getCanonicalName().equals(m.dispId);
         }
     }
 }

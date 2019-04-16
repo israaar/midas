@@ -1,8 +1,5 @@
 package middleman.interfaces;
 
-import middleman.MiddleMan;
-import java.io.Serializable;
-
 /**
  * This class is the underlying structure of the Medium
  *
@@ -10,30 +7,45 @@ import java.io.Serializable;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public abstract class Component<T extends Serializable> implements MessageReceiveListener<T> {
-    protected MiddleMan middleman;
+public abstract class Component {
+    protected Dispatcher dispatcher;
+    protected Thread thread;
 
-    public void attach(MiddleMan middleman) {
-        if (this.middleman != null) {
-            throw new IllegalStateException("Can only attach MiddleMan once." +
-                " If addeded as component to a Middleman object, attach is already called.");
+    public Component(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+        this.thread = new Thread(this::execute);
+    }
+
+    public final void start() {
+        this.thread.start();
+    }
+
+    private final void execute() {
+        try {
+            this.dispatcher.addInvocation(this);
+
+            this.run();
+        } finally {
+            cleanUp();
+            this.dispatcher.removeInvocation(this);
         }
-        this.middleman = middleman;
     }
 
-    protected void send(Message<T> message) {
-        middleman.send(message);
+    protected void cleanUp() {
+
     }
 
-    public final MiddleMan getMiddleMan() {
-        return this.middleman;
+    protected abstract void run();
+
+    protected void send(Message<?> message) {
+        dispatcher.getMiddleMan().send(message);
     }
 
-    public String getComponentId() {
-        return this.getClass().getCanonicalName();
+    public final Dispatcher<?> getDispatcher() {
+        return this.dispatcher;
     }
 
-    public boolean shouldHandleMessage(Message<?> m) {
-        return this.getClass().getCanonicalName().equals(m.compId);
+    public final <T extends Dispatcher<?>> T getDispatcher(Class<T> cls) {
+        return this.dispatcher.getMiddleMan().getDispatcher(cls);
     }
 }
