@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * This class is the underlying structure of the Message
+ * This class is the underlying structure of the Message.
+ * All messages will be created by extending this base type of message.
  *
  * @author Jesse Saran
  * @author Kyle Cutler
@@ -18,18 +19,44 @@ public class Message<T extends Serializable> implements Serializable {
     public final String dispId;
     public final T payload;
 
+    /**
+     * Message constructor for creating a message.
+     *
+     * @param dispatcher dispatcher instance
+     */
     public Message(Dispatcher<?> dispatcher) {
         this(UUID.randomUUID(), dispatcher);
     }
 
+    /**
+     * Message constructor for creating a message.
+     *
+     * @param T payload type
+     * @param payload payload included in message
+     * @param dispatcher dispatcher instance
+     */
     public Message(T payload, Dispatcher<?> dispatcher) {
         this(UUID.randomUUID(), payload, dispatcher);
     }
 
+    /**
+     * Message constructor for creating a message.
+     *
+     * @param id the unique message indentifier for this message
+     * @param dispatcher dispatcher instance
+     */
     public Message(UUID id, Dispatcher<?> dispatcher) {
         this(id, null, dispatcher);
     }
 
+    /**
+     * Message constructor for creating a message.
+     *
+     * @param id the unique message indentifier for this message
+     * @param T payload type
+     * @param payload payload included in message
+     * @param dispatcher dispatcher instance
+     */
     public Message(UUID id, T payload, Dispatcher<?> dispatcher) {
         this.id = id;
         this.payload = payload;
@@ -37,6 +64,12 @@ public class Message<T extends Serializable> implements Serializable {
         this.dispId = dispatcher.getDispatcherId();
     }
 
+    /**
+     * Overrides the ToString to provide information about this
+     * message.
+     *
+     * @return the string representation of this message.
+     */
     @Override
     public String toString() {
         return "Msg: " + id

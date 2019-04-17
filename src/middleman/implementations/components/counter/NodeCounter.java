@@ -27,7 +27,6 @@ public class NodeCounter extends Component {
     private UUID id;
     private UUID senderID;
     private int timeoutMillis;
-    private int heartbeatMillis;
 
     private int totalCount = 1;
 
@@ -38,13 +37,12 @@ public class NodeCounter extends Component {
 
     private ConcurrentLinkedQueue<HeartbeatReceiver> neighbors = new ConcurrentLinkedQueue<>();
 
-    private NodeCounter(Dispatcher dispatcher, Consumer<Integer> callback, UUID id, UUID senderID, int timeoutMillis, int heartbeatMillis) {
+    private NodeCounter(Dispatcher dispatcher, Consumer<Integer> callback, UUID id, UUID senderID, int timeoutMillis) {
         super(dispatcher);
 
         this.callback = callback;
         this.id = id;
         this.timeoutMillis = timeoutMillis;
-        this.heartbeatMillis = heartbeatMillis;
         this.senderID = senderID;
     }
 
@@ -168,7 +166,7 @@ public class NodeCounter extends Component {
             return new NodeCounter(
                 this, callback,
                 id, UUID.randomUUID(),
-                timeoutMillis, heartbeatMillis
+                timeoutMillis
             );
         }
 
@@ -238,8 +236,7 @@ public class NodeCounter extends Component {
                             },
                             message.id,
                             senderID,
-                            timeoutMillis,
-                            heartbeatMillis
+                            timeoutMillis
                         ).start();
                     }
                     break;

@@ -1,7 +1,9 @@
 package middleman.interfaces;
 
 /**
- * This class is the underlying structure of the Medium
+ * This class should be extended by any components. Each implemented
+ * component should have a single instance of a dispatcher. The dispatcher
+ * is added as reference for use within the component.
  *
  * @author Jesse Saran
  * @author Kyle Cutler
@@ -12,9 +14,8 @@ public abstract class Component {
     protected Thread thread;
 
     /**
-     * This class should be extended by any components. Each implemented
-     * component should have a single instance of a dispatcher. The dispatcher
-     * is added as reference for use within the component.
+     * The constructor takes a dispatcher instance to be used
+     * internally within the class.
      *
      * @param dispatcher dispatcher associated with this component
      */

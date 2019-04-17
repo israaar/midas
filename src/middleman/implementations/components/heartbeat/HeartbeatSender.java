@@ -14,7 +14,7 @@ import middleman.interfaces.*;
 public class HeartbeatSender extends Component {
     private UUID id;
     private int delayMillis;
-    private boolean isCancelled;
+    private boolean isCancelled = false;
 
     private HeartbeatSender(Dispatcher dispatcher, UUID id, int delayMillis) {
         super(dispatcher);
@@ -24,18 +24,18 @@ public class HeartbeatSender extends Component {
     }
 
     public void stop() {
-        this.isCancelled = false;
+        this.isCancelled = true;
         super.thread.interrupt();
     }
 
     @Override
     protected void run() {
-        try {
-            while (!isCancelled) {
+        while (!isCancelled) {
+            try {
                 send(new Message<String>(id, "", getDispatcher()));
                 Thread.sleep(delayMillis);
-            }
-        } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {}
+        }
     }
 
     public static class Dispatcher extends middleman.interfaces.Dispatcher<HeartbeatSender> {

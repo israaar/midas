@@ -53,7 +53,7 @@ public class HeartbeatReceiver extends Component {
         }
     }
 
-    private void onMessageReceived(Message<String> message) {
+    private void onHeartbeatReceived(Message<String> message) {
         if (message.id.equals(id)) {
             thread.interrupt();
         }
@@ -80,7 +80,7 @@ public class HeartbeatReceiver extends Component {
         @Override
         public void handleMessage(Message<?> message) {
             for (HeartbeatReceiver i : getInvocations()) {
-                i.onMessageReceived((Message<String>) message);
+                i.onHeartbeatReceived((Message<String>) message);
             }
         }
 
