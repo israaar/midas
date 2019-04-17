@@ -64,8 +64,6 @@ public class HeartbeatReceiver extends Component {
     }
 
     public static class Dispatcher extends middleman.interfaces.Dispatcher<HeartbeatReceiver> {
-        private ConcurrentHashMap<HeartbeatReceiver, Object> activeInvocations = new ConcurrentHashMap<>();
-
         /**
          * Starts a heartbeat
          *
@@ -81,7 +79,7 @@ public class HeartbeatReceiver extends Component {
         @SuppressWarnings("unchecked")
         @Override
         public void handleMessage(Message<?> message) {
-            for (HeartbeatReceiver i : activeInvocations.keySet()) {
+            for (HeartbeatReceiver i : getInvocations()) {
                 i.onMessageReceived((Message<String>) message);
             }
         }
