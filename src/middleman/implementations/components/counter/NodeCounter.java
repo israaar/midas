@@ -91,7 +91,6 @@ public class NodeCounter extends Component {
                 // again, shouldn't happen unless we cancelled.
             }
         }
-        // System.out.println("Cancelling: isCancelled[" + this.isCancelled + "] isEmpty[" + this.neighbors.isEmpty() + "]");
         this.state = State.COMPLETE;
 
         if (!this.isCancelled) {
@@ -104,7 +103,6 @@ public class NodeCounter extends Component {
         for (HeartbeatReceiver r : this.neighbors) {
             r.cancel();
         }
-        // System.out.println("Cleanup: " + id);
     }
 
     public synchronized void onReceiveAcknowledgement(Message<NodeCounterMessage> message) {
@@ -140,13 +138,11 @@ public class NodeCounter extends Component {
         }
 
         if (this.neighbors.isEmpty()) {
-            System.out.println("IS EMPTY: " + senderID);
             this.notifyAll();
         }
     }
 
     public synchronized void onReceiveResult(Message<NodeCounterMessage> message) {
-        // System.out.println("Receive Result: " + id);
         if (message.id.equals(this.id)
             && message.payload.senderID.equals(senderID)) {
 
@@ -214,7 +210,7 @@ public class NodeCounter extends Component {
                             )
                         );
 
-                        // start up heartbeat to received senderID
+                        // start up heartbeat from received senderID
                         HeartbeatSender heartbeat = this
                             .getMiddleMan()
                             .getDispatcher(HeartbeatSender.Dispatcher.class)
