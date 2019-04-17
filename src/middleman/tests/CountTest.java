@@ -17,17 +17,19 @@ public class CountTest {
     public static void main(String[] args) {
         ArrayList<MiddleMan> nodes = new ArrayList<>();
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 10; i++) {
             nodes.add(
                 new MiddleMan("CountTest")
-                    .addDispatcher(new NodeCounter.Dispatcher(2000, 1000))
-                    .addMedium(new SoftwareMedium())
+                    .addDispatcher(new NodeCounter.Dispatcher(1000, 400))
+                    .addMedium(new SoftwareMedium(2, 0))
             );
         }
 
-        nodes.get(0)
-            .getDispatcher(NodeCounter.Dispatcher.class)
-            .dispatch(System.out::println)
-            .start();
+        for (int i = 0; i < 10; i++) {
+            nodes.get(i)
+                .getDispatcher(NodeCounter.Dispatcher.class)
+                .dispatch(System.out::println)
+                .start();
+        }
     }
 }

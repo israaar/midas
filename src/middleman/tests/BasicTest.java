@@ -20,7 +20,7 @@ public class BasicTest {
             nodes.add(new Node(
                 new MiddleMan("BasicTest")
                     .addDispatcher(new MessageBroadcaster.Dispatcher())
-                    .addMedium(new SoftwareMedium())
+                    .addMedium(new SoftwareMedium(2, 0))
             ));
         }
 
