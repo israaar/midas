@@ -1,14 +1,12 @@
 package examples.broadcast.sockets;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 import middleman.interfaces.Medium;
 import middleman.interfaces.Message;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class Client extends Medium {
 
@@ -18,7 +16,6 @@ public class Client extends Medium {
     private final int port;
 
     public Client(int port) {
-        System.out.println("Client: " + port);
         this.port = port;
         this.thread = new Thread(this::run);
     }

@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import examples.broadcast.simple.MessageBroadcaster;
 import middleman.MiddleMan;
-import middleman.interfaces.*;
 
 public class Test {
 
@@ -45,25 +44,21 @@ public class Test {
         );
 
         System.out.println("Commands:");
-        System.out.println("    startclients - starts all client connections (call once all other servers are set)");
+        System.out.println("    start - starts all client connections (call once all other servers are set)");
         System.out.println("    stop - stops current server");
         System.out.println("    all other commands are sent as text to all other clients");
-        boolean clientsStarted = false;
         Scanner scanner = new Scanner(System.in);
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.equals("stop")) {
+                node.stop();
                 break;
-            } else if (line.equals("startclients")) {
-                if (!clientsStarted) {
-                    for (Client client : clients) {
-                        client.start();
-                    }
-                } else {
-                    System.out.println("clients can only be started once");
+            } else if (line.equals("start")) {
+                for (Client client : clients) {
+                    client.start();
                 }
             }
-            node.send(scanner.nextLine());
+            node.send(line);
         }
         scanner.close();
     }
@@ -73,6 +68,7 @@ public class Test {
         public final int id = nodeCounter++;
 
         public MessageBroadcaster bc;
+        private final Server server;
 
         public Node(MiddleMan middleman, int serverPort) {
             bc = middleman
@@ -85,8 +81,13 @@ public class Test {
                         );
                         // bc.cancel();
                     });
-            Server server = new Server(serverPort, middleman);
+            server = new Server(serverPort, middleman);
             bc.start();
+        }
+
+        public void stop() {
+            server.cancel();
+            bc.cancel();
         }
 
         public void send(String msg) {

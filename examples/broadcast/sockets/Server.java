@@ -31,7 +31,7 @@ public class Server {
     public void run() {
         System.out.println("Server attempting to start listening on port: " + port);
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Client started on port: " + port);
+            System.out.println("Server started on port: " + port);
             while (!cancel) {
                 Socket clientConnection = serverSocket.accept();
                 ServerClient serverClient = new ServerClient(clientConnection);
@@ -65,16 +65,17 @@ public class Server {
         }
 
         public void run() {
-            try {
+            try (
                 InputStream inputStream = socket.getInputStream();
-                // todo hookup to medium
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                ){
+                System.out.println("Client on port: " + port + " started");
                 while (true) {
                     try {
                         super.receive((Message<?>) objectInputStream.readObject());
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        System.out.println("Client on port: " + port + " disconnected");
+                        break;
                     }
                 }
             } catch (IOException ex) {
