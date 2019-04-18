@@ -1,9 +1,9 @@
-package middleman.implementations.components;
+package examples.location;
 
 import middleman.interfaces.*;
 
-class NodeDirectMessage extends Component {
-    public NodeDirectMessage(Dispatcher<NodeDirectMessage> d) {
+class NodeGetLocation extends Component {
+    public NodeGetLocation(Dispatcher<NodeGetLocation> d) {
         super(d);
     }
 

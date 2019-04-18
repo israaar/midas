@@ -1,4 +1,4 @@
-package middleman.implementations;
+package examples.shared;
 
 import java.util.ArrayList;
 import java.util.HashMap;

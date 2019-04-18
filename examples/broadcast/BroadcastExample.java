@@ -1,9 +1,10 @@
-package middleman.tests;
+package examples.broadcast;
 
 import java.util.ArrayList;
 
 import middleman.MiddleMan;
-import middleman.implementations.*;
+
+import examples.shared.SoftwareMedium;
 
 /**
  * This class runs a basic floodfill algorithm
@@ -12,7 +13,7 @@ import middleman.implementations.*;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public class BasicTest {
+public class BroadcastExample {
     public static void main(String[] args) {
         ArrayList<Node> nodes = new ArrayList<>();
 

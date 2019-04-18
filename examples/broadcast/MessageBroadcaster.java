@@ -1,4 +1,4 @@
-package middleman.implementations;
+package examples.broadcast;
 
 import java.io.Serializable;
 import java.util.HashSet;

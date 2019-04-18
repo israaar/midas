@@ -1,4 +1,4 @@
-package middleman.implementations.components.counter;
+package examples.counter;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 import middleman.MiddleMan;
-import middleman.implementations.components.heartbeat.HeartbeatReceiver;
-import middleman.implementations.components.heartbeat.HeartbeatSender;
 import middleman.interfaces.Component;
 import middleman.interfaces.Message;
+
+import examples.shared.components.heartbeat.*;
 
 /**
  * This class counts the number of nodes

@@ -1,10 +1,10 @@
-package middleman.tests;
+package examples.counter;
 
 import java.util.ArrayList;
 
 import middleman.MiddleMan;
-import middleman.implementations.*;
-import middleman.implementations.components.counter.NodeCounter;
+
+import examples.shared.SoftwareMedium;
 
 /**
  * This class tests the NodeCounter component
@@ -13,7 +13,7 @@ import middleman.implementations.components.counter.NodeCounter;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public class CountTest {
+public class CounterExample {
     public static void main(String[] args) {
         ArrayList<MiddleMan> nodes = new ArrayList<>();
 

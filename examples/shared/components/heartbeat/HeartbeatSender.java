@@ -1,4 +1,4 @@
-package middleman.implementations.components.heartbeat;
+package examples.shared.components.heartbeat;
 
 import java.util.UUID;
 
