@@ -1,4 +1,4 @@
-package examples.broadcast;
+package examples.broadcast.simple;
 
 import java.util.ArrayList;
 

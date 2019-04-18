@@ -1,8 +1,12 @@
-package middleman.tests.count;
+package examples.broadcast.sockets;
+
+import middleman.interfaces.Medium;
+import middleman.interfaces.Message;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,6 +18,7 @@ public class Client extends Medium {
     private final int port;
 
     public Client(int port) {
+        System.out.println("Client: " + port);
         this.port = port;
         this.thread = new Thread(this::run);
     }
@@ -28,7 +33,7 @@ public class Client extends Medium {
     }
 
     public void run() {
-        try (Socket socket = new Socket("0.0.0.0", port);
+        try (Socket socket = new Socket("localhost", port);
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             ) {
@@ -40,7 +45,6 @@ public class Client extends Medium {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            break;
         } catch (InterruptedException ex) {
             // should not be interrupted
         }
@@ -50,10 +54,5 @@ public class Client extends Medium {
     public synchronized void send(Message<?> message) {
         this.message = message;
         this.notifyAll();
-    }
-
-    @Override
-    protected final void receive(Message<?> msg) {
-        // NEVER receive data
     }
 }
