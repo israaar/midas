@@ -31,18 +31,6 @@ public class Test {
                     .addDispatcher(new MessageBroadcaster.Dispatcher()),
                 serverPort
             );
-
-            System.out.println("Commands:");
-            System.out.println("    stop - stops current server");
-            Scanner scanner = new Scanner(System.in);
-            while(scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.equals("stop")) {
-                    node.stop();
-                    break;
-                }
-            }
-            scanner.close();
         } else {
             System.out.println("Starting up in server mode, have " + (args.length-1) + " clients.");
             ArrayList<Integer> clientPorts = new ArrayList<Integer>();
@@ -69,15 +57,11 @@ public class Test {
 
             System.out.println("Commands:");
             System.out.println("    start - starts all client connections (call once all other servers are set)");
-            System.out.println("    stop - stops current server");
             System.out.println("    all other commands are sent as text to all other clients");
             Scanner scanner = new Scanner(System.in);
             while(scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                if (line.equals("stop")) {
-                    node.stop();
-                    break;
-                } else if (line.equals("start")) {
+                if (line.equals("start")) {
                     for (Client client : clients) {
                         client.start();
                     }

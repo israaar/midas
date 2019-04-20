@@ -34,6 +34,7 @@ public class Client extends Medium {
             OutputStream outputStream = socket.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             ) {
+            System.out.println("Connected to client: " + port);
             while (true) {
                 synchronized (this) {
                     this.wait();

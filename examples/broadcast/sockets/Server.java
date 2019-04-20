@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import middleman.MiddleMan;
 import middleman.interfaces.*;
@@ -15,6 +16,7 @@ public class Server {
     private int port;
     private boolean cancel = false;
     private MiddleMan middleman;
+    private ArrayList<ServerClient> clients = new ArrayList<ServerClient>();
 
     public Server(int port, MiddleMan middleman) {
         this.middleman = middleman;
@@ -26,6 +28,9 @@ public class Server {
     public void cancel() {
         this.cancel = true;
         this.thread.interrupt();
+        for (ServerClient client : clients) {
+            client.cancel();
+        }
     }
 
     public void run() {
@@ -36,6 +41,7 @@ public class Server {
                 Socket clientConnection = serverSocket.accept();
                 ServerClient serverClient = new ServerClient(clientConnection);
                 serverClient.start();
+                this.clients.add(serverClient);
                 middleman.addMedium(serverClient);
             }
 
@@ -61,7 +67,9 @@ public class Server {
 
         public void cancel() {
             this.cancel = true;
-            this.thread.interrupt();
+            if (!this.thread.isAlive()) {
+                this.thread.interrupt();
+            }
         }
 
         public void run() {
@@ -70,7 +78,7 @@ public class Server {
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                 ){
                 System.out.println("Client on port: " + port + " started");
-                while (true) {
+                while (!cancel) {
                     try {
                         super.receive((Message<?>) objectInputStream.readObject());
                     } catch (Exception e) {
@@ -81,6 +89,7 @@ public class Server {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            System.out.println("SERVER CLOSED");
         }
 
         @Override
