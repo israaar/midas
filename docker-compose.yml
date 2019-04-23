@@ -2,14 +2,20 @@ version: '3'
 
 services:
   server_4001:
+    stdin_open: true
+    tty: true
     image: midas_broadcast:latest
     environment:
       - PORTS=4001 4000 4002
     ports:
       - 4001:4001
+    network_mode: "host"
   server_4002:
+    stdin_open: true
+    tty: true
     image: midas_broadcast:latest
     environment:
       - PORTS=4002 4000 4001
     ports:
       - 4002:4002
+    network_mode: "host"
