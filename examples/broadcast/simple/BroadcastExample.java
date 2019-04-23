@@ -16,7 +16,7 @@ import examples.shared.SoftwareMedium;
 public class BroadcastExample {
     public static void main(String[] args) {
         try {
-            Thread.sleep(10000);
+            Thread.sleep(15000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class BroadcastExample {
 
     private static void test(int nodeCount) {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(7500);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -55,14 +55,14 @@ public class BroadcastExample {
         nodes.get(0).send("Hello Middleman!");
         nodes.get(0).bc.cancel();
         System.out.println("Ending: " + nodeCount);
+        for (Node node : nodes) {
+            node.bc.cancel();
+        }
         try {
-            Thread.sleep(5000);
+            Thread.sleep(7500);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        for (Node node : nodes) {
-            node.bc.cancel();
         }
     }
 
