@@ -28,24 +28,14 @@ grid(True)
 plt.savefig(filename + '.png')
 plt.clf()
 
-filename = 'broadcast_simple_cpu_data'
+filename = 'broadcast_simple_heap_memory'
 df=pd.read_csv('test_data/' + filename + '.csv', sep=',')
 df['ts'] = (df['Time'] - df['Time'].iloc[0]) * 100000
-plot(df['ts'], df['CPU Usage'])
- 
-lables = [10,50,100,250,500,750,900]
-lablesXI = [3, 8, 10, 12, 16, 19, 23]
-lablesY = [2.3, 2.3, 4.3, 6.0, 12.2, 10.1, 5.8]
-for i in range(0, len(lables)):
-    plt.annotate(
-        str(lables[i]) + " Cps.",
-        xy=(df['ts'].iloc[lablesXI[i]], lablesY[i]), xytext=(-5, 5),
-        textcoords='offset points', ha='right', va='bottom',
-        arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
+df['mb'] = (df['Used']) / 1000000
+plot(df['ts'], df['mb'])
 
 xlabel('Simulation Time (s)')
-ylabel('Percentage')
-title('CPU Usage')
-grid(True)
+ylabel('Committed Memory (Mb)')
+title('Heap Memory Usage')
 plt.savefig(filename + '.png')
 plt.clf()
