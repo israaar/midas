@@ -1,26 +1,24 @@
-package examples.broadcast.sockets;
+package examples.media.tcp;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import middleman.interfaces.Medium;
 import middleman.interfaces.Message;
 
 public class Client extends Medium {
-
     private Thread thread;
     private boolean cancel = false;
-    private Message<?> message;
+    private LinkedBlockingQueue<Message<?>> messages;
     private final int port;
 
     public Client(int port) {
         this.port = port;
+        this.messages = new LinkedBlockingQueue<>();
         this.thread = new Thread(this::run);
-    }
-
-    public void start() {
         this.thread.start();
     }
 
@@ -30,27 +28,28 @@ public class Client extends Medium {
     }
 
     public void run() {
-        try (Socket socket = new Socket("localhost", port);
-            OutputStream outputStream = socket.getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            ) {
-            System.out.println("Connected to client: " + port);
-            while (true) {
-                synchronized (this) {
-                    this.wait();
-                    objectOutputStream.writeObject(message);
-                }
+        try {
+            synchronized(this) {
+                this.wait();
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            try (Socket socket = new Socket("localhost", port);
+                OutputStream outputStream = socket.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                ) {
+                while (!cancel) {
+                    objectOutputStream.writeObject(messages.take());
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         } catch (InterruptedException ex) {
-            // should not be interrupted
+            // cancelled
         }
     }
 
     @Override
     public synchronized void send(Message<?> message) {
-        this.message = message;
+        this.messages.add(message);
         this.notifyAll();
     }
 }

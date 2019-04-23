@@ -1,5 +1,5 @@
-FROM java:8  
-COPY . /var/www/java  
-WORKDIR /var/www/java  
+FROM java:8
+COPY . /var/www/java
+WORKDIR /var/www/java
 RUN javac $(find . -name "*.java")
-CMD ["sh", "-c", "java examples.broadcast.sockets.Test ${PORTS}"]
+CMD ["sh", "-c", "java examples.TCPExample ${PORTS}"]

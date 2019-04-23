@@ -1,4 +1,4 @@
-package examples.shared;
+package examples.media;
 
 import java.util.ArrayList;
 import java.util.HashMap;

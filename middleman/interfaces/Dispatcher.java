@@ -91,6 +91,6 @@ public abstract class Dispatcher<T extends Component> {
      * @return true if it should be handled.
      */
     public boolean shouldHandleMessage(Message<?> m) {
-        return this.getClass().getCanonicalName().equals(m.dispId);
+        return getDispatcherId().equals(m.dispId);
     }
 }

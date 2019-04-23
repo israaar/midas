@@ -1,10 +1,11 @@
-package examples.broadcast.simple;
+package examples;
 
 import java.util.ArrayList;
 
 import middleman.MiddleMan;
 
-import examples.shared.SoftwareMedium;
+import examples.components.MessageBroadcaster;
+import examples.media.SoftwareMedium;
 
 /**
  * This class runs a basic floodfill algorithm
@@ -19,7 +20,7 @@ public class BroadcastExample {
 
         for (int i = 0; i < 10; i++) {
             nodes.add(new Node(
-                new MiddleMan("BasicTest")
+                new MiddleMan("BroadcastExample")
                     .addDispatcher(new MessageBroadcaster.Dispatcher())
                     .addMedium(new SoftwareMedium(2, 0))
             ));

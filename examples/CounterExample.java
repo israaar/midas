@@ -1,10 +1,11 @@
-package examples.counter;
+package examples;
 
 import java.util.ArrayList;
 
 import middleman.MiddleMan;
 
-import examples.shared.SoftwareMedium;
+import examples.components.NodeCounter;
+import examples.media.SoftwareMedium;
 
 /**
  * This class tests the NodeCounter component
@@ -19,7 +20,7 @@ public class CounterExample {
 
         for (int i = 0; i < 10; i++) {
             nodes.add(
-                new MiddleMan("CountTest")
+                new MiddleMan("CounterExample")
                     .addDispatcher(new NodeCounter.Dispatcher(1000, 400))
                     .addMedium(new SoftwareMedium(2, 0))
             );

@@ -1,4 +1,4 @@
-package examples.broadcast.simple;
+package examples.components;
 
 import java.io.Serializable;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package examples.shared.components.heartbeat;
+package examples.components.heartbeat;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;

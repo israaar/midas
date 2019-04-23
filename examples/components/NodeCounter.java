@@ -1,4 +1,4 @@
-package examples.counter;
+package examples.components;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import middleman.MiddleMan;
 import middleman.interfaces.Component;
 import middleman.interfaces.Message;
 
-import examples.shared.components.heartbeat.*;
+import examples.components.heartbeat.*;
 
 /**
  * This class counts the number of nodes

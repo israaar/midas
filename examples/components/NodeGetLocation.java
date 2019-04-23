@@ -1,4 +1,4 @@
-package examples.location;
+package examples.components;
 
 import middleman.interfaces.*;
 
