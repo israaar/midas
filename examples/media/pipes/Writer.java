@@ -3,8 +3,8 @@ package examples.media.pipes;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-import middleman.interfaces.Medium;
-import middleman.interfaces.Message;
+import midas.interfaces.Medium;
+import midas.interfaces.Message;
 
 public class Writer extends Medium {
     private ObjectOutputStream out;

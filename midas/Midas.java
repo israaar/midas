@@ -1,9 +1,9 @@
-package middleman;
+package midas;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 /**
  * This class is used by dispatchers in order to interact with one another.
@@ -13,18 +13,18 @@ import middleman.interfaces.*;
  * @author Kyle Cutler
  * @author Allahsera Auguste Tapo
  */
-public class MiddleMan {
+public class Midas {
 
     // Java types won't let us associate the types of the key and value
     private HashMap<Class<?>, Dispatcher<?>> dispatchers = new HashMap<>();
     private ArrayList<Medium> media = new ArrayList<>();
     private String appName;
 
-    public MiddleMan(String appName) {
+    public Midas(String appName) {
         this(appName, null, null);
     }
 
-    public MiddleMan(String appName, Dispatcher<?>[] dispatchers, Medium[] media) {
+    public Midas(String appName, Dispatcher<?>[] dispatchers, Medium[] media) {
         if (appName == null) {
             throw new IllegalArgumentException("App Name must not be null");
         }
@@ -43,7 +43,7 @@ public class MiddleMan {
         }
     }
 
-    public MiddleMan addDispatcher(Dispatcher<?> disp) {
+    public Midas addDispatcher(Dispatcher<?> disp) {
         if (disp == null) {
             throw new IllegalArgumentException("Dispatcher must not be null");
         }
@@ -57,7 +57,7 @@ public class MiddleMan {
         return this;
     }
 
-    public MiddleMan addMedium(Medium medium) {
+    public Midas addMedium(Medium medium) {
         if (medium == null) {
             throw new IllegalArgumentException("Medium must not be null");
         }
@@ -104,7 +104,7 @@ public class MiddleMan {
 
         throw new RuntimeException("Dispatcher "
             + cls.getCanonicalName()
-            + " has not been added to this instance of MiddleMan");
+            + " has not been added to this instance of Midas");
     }
 
     public String getAppName() {

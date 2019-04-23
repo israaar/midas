@@ -7,9 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
-import middleman.MiddleMan;
-import middleman.interfaces.Component;
-import middleman.interfaces.Message;
+import midas.Midas;
+import midas.interfaces.Component;
+import midas.interfaces.Message;
 
 import examples.components.heartbeat.*;
 
@@ -149,7 +149,7 @@ public class NodeCounter extends Component {
         }
     }
 
-    public static class Dispatcher extends middleman.interfaces.Dispatcher<NodeCounter> {
+    public static class Dispatcher extends midas.interfaces.Dispatcher<NodeCounter> {
         private ConcurrentHashMap<UUID, Object> seenIds = new ConcurrentHashMap<>();
         private final int timeoutMillis;
         private final int heartbeatMillis;
@@ -170,11 +170,11 @@ public class NodeCounter extends Component {
             );
         }
 
-        public void attach(MiddleMan middleman) {
-            super.attach(middleman);
+        public void attach(Midas midas) {
+            super.attach(midas);
 
-            middleman.addDispatcher(new HeartbeatSender.Dispatcher());
-            middleman.addDispatcher(new HeartbeatReceiver.Dispatcher());
+            midas.addDispatcher(new HeartbeatSender.Dispatcher());
+            midas.addDispatcher(new HeartbeatReceiver.Dispatcher());
         }
 
         @Override
@@ -197,7 +197,7 @@ public class NodeCounter extends Component {
                         UUID senderID = UUID.randomUUID();
 
                         // respond with acknowledgment
-                        this.getMiddleMan().send(
+                        this.getMidas().send(
                             new Message<NodeCounterMessage>(
                                 message.id,
                                 NodeCounterMessage.makeAck(
@@ -210,7 +210,7 @@ public class NodeCounter extends Component {
 
                         // start up heartbeat from received senderID
                         HeartbeatSender heartbeat = this
-                            .getMiddleMan()
+                            .getMidas()
                             .getDispatcher(HeartbeatSender.Dispatcher.class)
                             .dispatch(senderID, heartbeatMillis);
 
@@ -222,7 +222,7 @@ public class NodeCounter extends Component {
                             count -> {
                                 heartbeat.stop();
 
-                                this.getMiddleMan().send(
+                                this.getMidas().send(
                                     new Message<NodeCounterMessage>(
                                         message.id,
                                         NodeCounterMessage.makeResult(

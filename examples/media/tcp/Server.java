@@ -6,17 +6,17 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import middleman.MiddleMan;
-import middleman.interfaces.*;
+import midas.Midas;
+import midas.interfaces.*;
 
 public class Server {
     private Thread thread;
     private int port;
     private boolean cancel = false;
-    private MiddleMan middleman;
+    private Midas midas;
 
-    public Server(int port, MiddleMan middleman) {
-        this.middleman = middleman;
+    public Server(int port, Midas midas) {
+        this.midas = midas;
         this.port = port;
         this.thread = new Thread(this::run);
         this.thread.start();
@@ -34,7 +34,7 @@ public class Server {
             while (!cancel) {
                 Socket clientConnection = serverSocket.accept();
                 ServerClient serverClient = new ServerClient(clientConnection);
-                middleman.addMedium(serverClient);
+                midas.addMedium(serverClient);
             }
 
         } catch (IOException e) {

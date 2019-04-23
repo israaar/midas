@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t middleman_broadcast -f Dockerfile_broadcast_middleman .
+docker build -t midas_broadcast -f Dockerfile_broadcast_midas .

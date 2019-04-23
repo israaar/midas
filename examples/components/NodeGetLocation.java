@@ -1,6 +1,6 @@
 package examples.components;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 class NodeGetLocation extends Component {
     public NodeGetLocation(Dispatcher<NodeGetLocation> d) {

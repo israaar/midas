@@ -1,4 +1,4 @@
-package middleman.interfaces;
+package midas.interfaces;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -60,7 +60,7 @@ public class Message<T extends Serializable> implements Serializable {
     public Message(UUID id, T payload, Dispatcher<?> dispatcher) {
         this.id = id;
         this.payload = payload;
-        this.appId = dispatcher.getMiddleMan().getAppName();
+        this.appId = dispatcher.getMidas().getAppName();
         this.dispId = dispatcher.getDispatcherId();
     }
 

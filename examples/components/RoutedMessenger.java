@@ -3,7 +3,7 @@ package examples.components;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 public class RoutedMessenger extends Component {
     protected RoutedMessenger(Dispatcher dispatcher) {
@@ -15,7 +15,7 @@ public class RoutedMessenger extends Component {
 
     }
 
-    public static final class Dispatcher extends middleman.interfaces.Dispatcher<RoutedMessenger> {
+    public static final class Dispatcher extends midas.interfaces.Dispatcher<RoutedMessenger> {
         private final String id;
         private final Consumer<RoutedMessage> callback;
 
@@ -25,7 +25,7 @@ public class RoutedMessenger extends Component {
         }
 
         public void send(String recipientId, String message) {
-            getMiddleMan().send(new Message<>(
+            getMidas().send(new Message<>(
                 new RoutedMessage(recipientId, message, new String[] {id}),
                 this
             ));
@@ -42,7 +42,7 @@ public class RoutedMessenger extends Component {
                     if (rid.equals(id)) return;
                 }
 
-                getMiddleMan().send(new Message<>(
+                getMidas().send(new Message<>(
                     msg.id,
                     payload.addRoute(id),
                     this

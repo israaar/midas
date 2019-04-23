@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.UUID;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 /**
  * This class imeplements a basic flood-fill routing algorithm
@@ -55,7 +55,7 @@ public class MessageBroadcaster extends Component {
         void onMessageReceived(Message<T> message);
     }
 
-    public static class Dispatcher extends middleman.interfaces.Dispatcher<MessageBroadcaster> {
+    public static class Dispatcher extends midas.interfaces.Dispatcher<MessageBroadcaster> {
         public MessageBroadcaster dispatch(MessageReceiveListener<String> listener) {
             return new MessageBroadcaster(this, listener);
         }

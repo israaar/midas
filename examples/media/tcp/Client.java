@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import middleman.interfaces.Medium;
-import middleman.interfaces.Message;
+import midas.interfaces.Medium;
+import midas.interfaces.Message;
 
 public class Client extends Medium {
     private Thread thread;

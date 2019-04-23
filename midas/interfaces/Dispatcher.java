@@ -1,8 +1,8 @@
-package middleman.interfaces;
+package midas.interfaces;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import middleman.MiddleMan;
+import midas.Midas;
 
 /**
  * Handles messages that are relevant for the existing component.
@@ -14,28 +14,28 @@ import middleman.MiddleMan;
  * @author Allahsera Auguste Tapo
  */
 public abstract class Dispatcher<T extends Component> {
-    private MiddleMan middleman;
+    private Midas midas;
     private ConcurrentHashMap<T, Object> invocations = new ConcurrentHashMap<>();
 
     /**
-     * To attach the dispatcher to the middleman. Should only be called once
+     * To attach the dispatcher to the midas. Should only be called once
      * or it will through a runtime error.
      *
-     * @param middleman the middleman instance
+     * @param midas the midas instance
      */
-    public void attach(MiddleMan middleman) {
-        if (this.middleman != null) {
+    public void attach(Midas midas) {
+        if (this.midas != null) {
             throw new IllegalStateException("Can only attach Dispatcher once." +
                 " If added as component to a Dispatcher object, attach is already called.");
         }
-        this.middleman = middleman;
+        this.midas = midas;
     }
 
     /**
-     * Returns the instance of MiddleMan that this dispatcher is associated with
+     * Returns the instance of Midas that this dispatcher is associated with
      */
-    public final MiddleMan getMiddleMan() {
-        return middleman;
+    public final Midas getMidas() {
+        return midas;
     }
 
     /**

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 /**
  * This class is the underlying structure of the SoftwareMedium

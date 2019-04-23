@@ -3,7 +3,7 @@ package examples.components.heartbeat;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 /**
  * Listens for heartbeat messages from a specific sender
@@ -63,7 +63,7 @@ public class HeartbeatReceiver extends Component {
         public void onTimeout();
     }
 
-    public static class Dispatcher extends middleman.interfaces.Dispatcher<HeartbeatReceiver> {
+    public static class Dispatcher extends midas.interfaces.Dispatcher<HeartbeatReceiver> {
         /**
          * Starts a heartbeat
          *

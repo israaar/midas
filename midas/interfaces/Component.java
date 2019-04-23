@@ -1,4 +1,4 @@
-package middleman.interfaces;
+package midas.interfaces;
 
 /**
  * This class should be extended by any components. Each implemented
@@ -65,7 +65,7 @@ public abstract class Component {
      * @param message message to send
      */
     protected void send(Message<?> message) {
-        dispatcher.getMiddleMan().send(message);
+        dispatcher.getMidas().send(message);
     }
 
     /**
@@ -85,6 +85,6 @@ public abstract class Component {
      * @return the dispatcher instance associated with the class
      */
     public final <T extends Dispatcher<?>> T getDispatcher(Class<T> cls) {
-        return this.dispatcher.getMiddleMan().getDispatcher(cls);
+        return this.dispatcher.getMidas().getDispatcher(cls);
     }
 }

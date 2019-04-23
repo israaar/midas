@@ -2,7 +2,7 @@ package examples.components.heartbeat;
 
 import java.util.UUID;
 
-import middleman.interfaces.*;
+import midas.interfaces.*;
 
 /**
  * Sends out heartbeat messages
@@ -38,7 +38,7 @@ public class HeartbeatSender extends Component {
         }
     }
 
-    public static class Dispatcher extends middleman.interfaces.Dispatcher<HeartbeatSender> {
+    public static class Dispatcher extends midas.interfaces.Dispatcher<HeartbeatSender> {
         /**
          * Starts a heartbeat
          *

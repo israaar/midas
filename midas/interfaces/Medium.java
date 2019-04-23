@@ -1,6 +1,6 @@
-package middleman.interfaces;
+package midas.interfaces;
 
-import middleman.MiddleMan;
+import midas.Midas;
 
 /**
  * This class is the underlying structure of the Medium
@@ -10,7 +10,7 @@ import middleman.MiddleMan;
  * @author Allahsera Auguste Tapo
  */
 public abstract class Medium {
-    protected MiddleMan middleman;
+    protected Midas midas;
 
     /**
      * Sends the given message (implementation specific).
@@ -26,17 +26,17 @@ public abstract class Medium {
      * @param message The message that has been received
      */
     protected final void receive(Message<?> msg) {
-        if (this.middleman != null) {
-            this.middleman.onMessageReceived(msg);
+        if (this.midas != null) {
+            this.midas.onMessageReceived(msg);
         }
     }
 
     /**
-     * Attaches this Medium to the given MiddleMan
+     * Attaches this Medium to the given Midas
      *
      * @param Component The Component to notify
      */
-    public final void attach(MiddleMan middleman) {
-        this.middleman = middleman;
+    public final void attach(Midas midas) {
+        this.midas = midas;
     }
 }

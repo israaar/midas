@@ -2,7 +2,7 @@ package examples;
 
 import java.util.ArrayList;
 
-import middleman.MiddleMan;
+import midas.Midas;
 
 import examples.components.MessageBroadcaster;
 import examples.media.SoftwareMedium;
@@ -20,7 +20,7 @@ public class BroadcastExample {
 
         for (int i = 0; i < 10; i++) {
             nodes.add(new Node(
-                new MiddleMan("BroadcastExample")
+                new Midas("BroadcastExample")
                     .addDispatcher(new MessageBroadcaster.Dispatcher())
                     .addMedium(new SoftwareMedium(2, 0))
             ));
@@ -36,8 +36,8 @@ public class BroadcastExample {
 
         public MessageBroadcaster bc;
 
-        public Node(MiddleMan middleman) {
-            bc = middleman
+        public Node(Midas midas) {
+            bc = midas
                     .getDispatcher(MessageBroadcaster.Dispatcher.class)
                     .dispatch(msg -> {
                         System.out.println(

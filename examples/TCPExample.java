@@ -7,7 +7,7 @@ import examples.components.NodeCounter;
 import examples.components.RoutedMessenger;
 import examples.components.MessageBroadcaster;
 import examples.media.tcp.*;
-import middleman.MiddleMan;
+import midas.Midas;
 
 public class TCPExample {
     public static void main(String [] args) {
@@ -36,17 +36,17 @@ public class TCPExample {
             }
         }
 
-        MiddleMan middleman = new MiddleMan("TCPExample");
+        Midas midas = new Midas("TCPExample");
 
         Client[] clients = new Client[args.length-1];
         for (int i = 0; i < clients.length; i++) {
             clients[i] = new Client(clientPorts.get(i));
-            middleman.addMedium(clients[i]);
+            midas.addMedium(clients[i]);
         }
 
-        Server server = new Server(serverPort, middleman);
+        Server server = new Server(serverPort, midas);
 
-        Node node = new Node(args[0], middleman);
+        Node node = new Node(args[0], midas);
 
         System.out.println("Commands:");
         System.out.println("    count - counts number of connected nodes");
@@ -84,9 +84,9 @@ public class TCPExample {
 
         private final NodeCounter.Dispatcher ncDispatcher;
 
-        public Node(String id, MiddleMan middleman) {
+        public Node(String id, Midas midas) {
             mbDispatcher = new MessageBroadcaster.Dispatcher();
-            middleman.addDispatcher(mbDispatcher);
+            midas.addDispatcher(mbDispatcher);
             bc = mbDispatcher.dispatch(msg -> {
                         System.out.println(
                             id + ": "
@@ -102,10 +102,10 @@ public class TCPExample {
                     String.join(" -> ", msg.routes) + ": " + msg.message
                 )
             );
-            middleman.addDispatcher(rmDispatcher);
+            midas.addDispatcher(rmDispatcher);
 
             ncDispatcher = new NodeCounter.Dispatcher(1000, 500);
-            middleman.addDispatcher(ncDispatcher);
+            midas.addDispatcher(ncDispatcher);
         }
 
         public void stop() {

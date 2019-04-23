@@ -3,8 +3,8 @@ package examples.media.pipes;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-import middleman.interfaces.Medium;
-import middleman.interfaces.Message;
+import midas.interfaces.Medium;
+import midas.interfaces.Message;
 
 public class Reader extends Medium {
     public Reader(String filename) {

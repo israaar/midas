@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import examples.components.RoutedMessenger;
 import examples.media.pipes.*;
-import middleman.MiddleMan;
+import midas.Midas;
 
 public class PipesExample {
     public static void main(String[] args) {
@@ -21,12 +21,12 @@ public class PipesExample {
             args[0],
             msg -> System.out.println(String.join(" -> ", msg.routes) + ": " + msg.message)
         );
-        MiddleMan middleman = new MiddleMan("PipesExample")
+        Midas midas = new Midas("PipesExample")
             .addDispatcher(dispatcher);
 
         for (int i = 1; i < args.length; i++) {
-            middleman.addMedium(new Writer("pipes/" + args[0] + "-" + args[i]));
-            middleman.addMedium(new Reader("pipes/" + args[i] + "-" + args[0]));
+            midas.addMedium(new Writer("pipes/" + args[0] + "-" + args[i]));
+            midas.addMedium(new Reader("pipes/" + args[i] + "-" + args[0]));
         }
 
         System.out.println("Ready");

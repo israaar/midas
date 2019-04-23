@@ -2,7 +2,7 @@ package examples;
 
 import java.util.ArrayList;
 
-import middleman.MiddleMan;
+import midas.Midas;
 
 import examples.components.NodeCounter;
 import examples.media.SoftwareMedium;
@@ -16,11 +16,11 @@ import examples.media.SoftwareMedium;
  */
 public class CounterExample {
     public static void main(String[] args) {
-        ArrayList<MiddleMan> nodes = new ArrayList<>();
+        ArrayList<Midas> nodes = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             nodes.add(
-                new MiddleMan("CounterExample")
+                new Midas("CounterExample")
                     .addDispatcher(new NodeCounter.Dispatcher(1000, 400))
                     .addMedium(new SoftwareMedium(2, 0))
             );
