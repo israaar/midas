@@ -49,6 +49,9 @@ public class TCPExample {
         Node node = new Node(args[0], middleman);
 
         System.out.println("Commands:");
+        System.out.println("    count - counts number of connected nodes");
+        System.out.println("    send <msg> - broadcasts the message to all nodes");
+        System.out.println("    trace <port> <msg> - sends the message to the given node via the network");
         System.out.println("    stop - stops current server");
         System.out.println("    all other commands are sent as text to all other clients");
 
@@ -74,17 +77,17 @@ public class TCPExample {
     private static class Node {
         private static int nodeCounter = 0;
         public final int id = nodeCounter++;
-        private final MessageBroadcaster.Dispatcher dispatcher;
+        private final MessageBroadcaster.Dispatcher mbDispatcher;
         private final MessageBroadcaster bc;
 
-        // private final RoutedMessenger.Dispatcher dispatcher;
+        private final RoutedMessenger.Dispatcher rmDispatcher;
 
-        // private final NodeCounter.Dispatcher dispatcher;
+        private final NodeCounter.Dispatcher ncDispatcher;
 
         public Node(String id, MiddleMan middleman) {
-            dispatcher = new MessageBroadcaster.Dispatcher();
-            middleman.addDispatcher(dispatcher);
-            bc = dispatcher.dispatch(msg -> {
+            mbDispatcher = new MessageBroadcaster.Dispatcher();
+            middleman.addDispatcher(mbDispatcher);
+            bc = mbDispatcher.dispatch(msg -> {
                         System.out.println(
                             id + ": "
                             + msg.id + ", "
@@ -94,15 +97,15 @@ public class TCPExample {
                     });
             bc.start();
 
-            // // dispatcher = new RoutedMessenger.Dispatcher(
-            //     id, msg -> System.out.println(
-            //         String.join(" -> ", msg.routes) + ": " + msg.message
-            //     )
-            // );
-            // middleman.addDispatcher(dispatcher);
+            rmDispatcher = new RoutedMessenger.Dispatcher(
+                id, msg -> System.out.println(
+                    String.join(" -> ", msg.routes) + ": " + msg.message
+                )
+            );
+            middleman.addDispatcher(rmDispatcher);
 
-            // dispatcher = new NodeCounter.Dispatcher(1000, 500);
-            // middleman.addDispatcher(dispatcher);
+            ncDispatcher = new NodeCounter.Dispatcher(1000, 500);
+            middleman.addDispatcher(ncDispatcher);
         }
 
         public void stop() {
@@ -110,16 +113,23 @@ public class TCPExample {
         }
 
         public void send(String cmd) {
-            bc.send(cmd);
+            cmd = cmd.trim();
 
-            // int index = cmd.indexOf(" ");
-            // if (index < 0) {
-            //     System.err.println("Command must be of the form: <port> <message>");
-            //     return;
-            // }
-            // dispatcher.send(cmd.substring(0, index), cmd.substring(index + 1));
+            if (cmd.equals("count")) {
+                ncDispatcher.dispatch(System.out::println).start();
+            } else if (cmd.startsWith("trace ")) {
+                cmd = cmd.substring(6);
 
-            // dispatcher.dispatch(System.out::println).start();
+                int index = cmd.indexOf(" ");
+                if (index < 0) {
+                    System.err.println("Command must be of the form: <port> <message>");
+                    return;
+                }
+                rmDispatcher.send(cmd.substring(0, index), cmd.substring(index + 1));
+            } else if (cmd.startsWith("send ")) {
+                cmd = cmd.substring(5);
+                bc.send(cmd);
+            }
         }
     }
 }
