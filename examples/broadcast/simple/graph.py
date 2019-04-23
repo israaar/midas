@@ -11,7 +11,7 @@ lablesXI = [2, 4, 8, 12, 16, 20, 23]
 lablesY = [14, 64, 114, 264, 514, 764, 914]
 for i in range(0, len(lables)):
     plt.annotate(
-        str(lables[i]) + " Nodes",
+        str(lables[i]) + " Cps.",
         xy=(df['ts'].iloc[lablesXI[i]], lablesY[i]), xytext=(-5, 5),
         textcoords='offset points', ha='right', va='bottom',
         arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
@@ -38,7 +38,7 @@ lablesXI = [3, 8, 10, 12, 16, 19, 23]
 lablesY = [2.3, 2.3, 4.3, 6.0, 12.2, 10.1, 5.8]
 for i in range(0, len(lables)):
     plt.annotate(
-        str(lables[i]) + " Nodes",
+        str(lables[i]) + " Cps.",
         xy=(df['ts'].iloc[lablesXI[i]], lablesY[i]), xytext=(-5, 5),
         textcoords='offset points', ha='right', va='bottom',
         arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
