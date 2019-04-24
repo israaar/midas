@@ -26,7 +26,7 @@ public class BroadcastExample {
             ));
         }
 
-        nodes.get(0).send("Hello Middleman!");
+        nodes.get(0).send("Hello Midas!");
         nodes.get(0).bc.cancel();
     }
 
