@@ -2,6 +2,9 @@
 
 This project is a middleware library for mobile ad-hoc networking that supports using heterogeneous media for communication.
 
+## Examples
+There are numerous examples for how to create different components in the examples directory.
+
 ## Building a jar
 Run the `build_jar.sh` script to build on Linux/Mac
 
