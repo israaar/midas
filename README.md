@@ -1,4 +1,4 @@
-# Midas: Middleware Library for Mobile Ad-Hoc Networking using Heterogenous Media
+# MIDAS: Middleware for Implementing Distributed Ad-hoc Systems
 
 This project is a middleware library for mobile ad-hoc networking that supports using heterogeneous media for communication.
 
